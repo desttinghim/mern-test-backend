@@ -55,6 +55,40 @@ const createPlace = (req, res, next) => {
   res.status(201).json({ place: createdPlace });
 };
 
+const updatePlaceById = (req, res, next) => {
+  const placeId = req.params.pid;
+
+  const updatedPlace = DUMMY_PLACES.find((p) => p.id === placeId);
+
+  if (!updatedPlace) {
+    return next(new HttpError("Could not find place for provided id.", 404));
+  }
+
+  const { title, description, coordinates, address, creator } = req.body;
+
+  updatedPlace.title = title;
+  updatedPlace.description = description;
+  updatedPlace.location = coordinates;
+  updatedPlace.address = address;
+  updatedPlace.creator = creator;
+
+  res.status(200).json({ place: updatedPlace });
+};
+
+const deletePlaceById = (req, res, next) => {
+  const placeId = req.params.pid;
+
+  const deleteIndex = DUMMY_PLACES.findIndex((p) => p.id === placeId);
+
+  if (deleteIndex < 0) {
+    return next(new HttpError("Could not find place for provided id.", 404));
+  }
+
+  res.status(200).json({ place: DUMMY_PLACES.splice(deleteIndex) });
+};
+
 exports.getPlaceById = getPlaceById;
 exports.getPlaceByUserId = getPlaceByUserId;
 exports.createPlace = createPlace;
+exports.updatePlaceById = updatePlaceById;
+exports.deletePlaceById = deletePlaceById;
