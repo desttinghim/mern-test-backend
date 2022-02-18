@@ -13,12 +13,6 @@ const DUMMY_USERS = [
 ];
 
 const getUsers = (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    console.log(errors);
-    throw new HttpError("Invalid inputs passed, please check your data.", 422);
-  }
-
   const users = DUMMY_USERS.map((user) => ({ id: user.id, name: user.name }));
 
   res.status(200).json({ users });
