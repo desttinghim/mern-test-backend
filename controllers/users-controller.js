@@ -13,10 +13,18 @@ const DUMMY_USERS = [
   },
 ];
 
-const getUsers = (req, res, next) => {
-  const users = DUMMY_USERS.map((user) => ({ id: user.id, name: user.name }));
+const getUsers = async (req, res, next) => {
+  let users;
 
-  res.status(200).json({ users });
+  try {
+    users = await User.find({}, "-password");
+  } catch (err) {
+    return next(new HttpError("Could not get users.", 500));
+  }
+
+  res
+    .status(200)
+    .json({ users: users.map((u) => u.toObject({ getters: true })) });
 };
 
 const signup = async (req, res, next) => {
