@@ -74,7 +74,7 @@ const createPlace = async (req, res, next) => {
   });
 
   try {
-    const user = await User.findById(creator);
+    const user = await User.findById(req.userData.userId);
     if (!user)
       return next(new HttpError("Could not find user for provided id", 404));
     console.log(user);
