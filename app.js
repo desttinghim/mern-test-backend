@@ -47,11 +47,9 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message ?? "An unknown error occurred!" });
 });
 
-const mongoPasswd = require("./secrets.js").mongoPasswd;
-
 mongoose
   .connect(
-    `mongodb+srv://lpearson:${mongoPasswd}@cluster0.lol2s.mongodb.net/mern?retryWrites=true&w=majority`
+    `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.lol2s.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
   )
   .then(() => {
     app.listen(5000);
