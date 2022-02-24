@@ -35,6 +35,7 @@ const signup = async (req, res, next) => {
   try {
     existingUser = await User.findOne({ email: email });
   } catch (err) {
+    console.log("Signup error, user email in database.");
     return next(new HttpError("Could not create user.", 500));
   }
 
@@ -46,8 +47,9 @@ const signup = async (req, res, next) => {
 
   let hashedPassword;
   try {
-    hashedPassword = bcrypt.hash(password, 12);
+    hashedPassword = await bcrypt.hash(password, 12);
   } catch (err) {
+    console.log("Signup error, hashing password failed");
     const error = new HttpError(
       "Could not create user, please try again.",
       500
@@ -66,6 +68,7 @@ const signup = async (req, res, next) => {
   try {
     await createdUser.save();
   } catch (err) {
+    console.log("Signup error, saving to database failed.", createdUser);
     return next(new HttpError("Signup failed.", 500));
   }
 
@@ -77,6 +80,7 @@ const signup = async (req, res, next) => {
       { expiresIn: "1h" }
     );
   } catch (err) {
+    console.log("Signup error, failed to generate token.");
     return next(new HttpError("Signup failed.", 500));
   }
 
