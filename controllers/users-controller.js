@@ -10,7 +10,7 @@ const getUsers = async (req, res, next) => {
   let users;
 
   try {
-    users = await User.find({}, "-password");
+    users = await User.find({}, "-password -email -__v");
   } catch (err) {
     return next(new HttpError("Could not get users.", 500));
   }
